@@ -6,7 +6,7 @@ import SChat from './Chat/SChat';
 import SDdata from './Data/Data.json'
 import { io } from 'socket.io-client';
 
-const socket = io.connect("http://localhost:3005")
+const socket = io.connect("https://medicare-backend-chat.vercel.app")
 
 export default function DoctorAdvice() {
   const [chatVisible, setChatVisible] = useState(false);

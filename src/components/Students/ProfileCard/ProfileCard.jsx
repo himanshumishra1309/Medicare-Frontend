@@ -19,7 +19,7 @@ const ProfileCard = () => {
         const studentId = localStorage.getItem('studentId');
         if(studentId){
           try {
-            const response = await axios.get(`http://localhost:8000/student/${studentId}`);
+            const response = await axios.get(`https://medicare-backend-1.vercel.app/student/${studentId}`);
             setProfileData({
               name: response.data.name,
               email: response.data.email,
@@ -57,7 +57,7 @@ const handleSave = async () => {
   if (studentId) {
     try {
       // Fetch the full profile data
-      const { data: fullProfileData } = await axios.get(`http://localhost:8000/student/${studentId}`);
+      const { data: fullProfileData } = await axios.get(`https://medicare-backend-1.vercel.app/student/${studentId}`);
       
       // Merge edited fields with the original fields, keeping sensitive data intact
       const updatedProfileData = {
@@ -69,7 +69,7 @@ const handleSave = async () => {
       // Log the data being sent
       console.log('Data being sent:', updatedProfileData);
 
-      const response = await axios.put(`http://localhost:8000/student/${studentId}`, updatedProfileData);
+      const response = await axios.put(`https://medicare-backend-1.vercel.app/student/${studentId}`, updatedProfileData);
 
       if (response.status === 200) {
         alert('Profile updated successfully.');

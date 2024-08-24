@@ -90,7 +90,7 @@ const handleContinue = (event) =>{
       // Remove the plain password field (optional but recommended)
       delete signupDataWithHash.password;
       
-      const response = await axios.post('http://localhost:8000/doctor', signupDataWithHash);
+      const response = await axios.post('https://medicare-backend-1.vercel.app/doctor', signupDataWithHash);
       localStorage.setItem('doctorId', response.data.id); // Store doctor ID
       navigate('/doc'); // Redirect to the profile page
     } catch (error) {

@@ -18,7 +18,7 @@ const DocProfileCard = () => {
       const doctorId = localStorage.getItem('doctorId');
       if (doctorId) {
         try {
-          const response = await axios.get(`http://localhost:8000/doctor/${doctorId}`);
+          const response = await axios.get(`https://medicare-backend-1.vercel.app/doctor/${doctorId}`);
           // console.log(response);
           // console.log(response.data);
           setProfileData({
@@ -56,7 +56,7 @@ const DocProfileCard = () => {
     if (doctorId) {
       try {
         // Fetch the full profile data including fields like hashed_password, created_at, etc.
-        const fullProfileData = await axios.get(`http://localhost:8000/doctor/${doctorId}`);
+        const fullProfileData = await axios.get(`https://medicare-backend-1.vercel.app/doctor/${doctorId}`);
   
         // Merge the edited fields with the unchanged ones
         const updatedProfileData = {
@@ -67,7 +67,7 @@ const DocProfileCard = () => {
         // Log the data being sent
         console.log('Data being sent:', updatedProfileData);
   
-        const response = await axios.put(`http://localhost:8000/doctor/${doctorId}`, updatedProfileData);
+        const response = await axios.put(`https://medicare-backend-1.vercel.app/doctor/${doctorId}`, updatedProfileData);
   
         if (response.status === 200) {
           alert('Profile updated successfully.');

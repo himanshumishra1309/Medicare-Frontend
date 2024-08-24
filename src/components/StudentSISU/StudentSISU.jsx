@@ -89,7 +89,7 @@ function StudentSISU() {
         try {
             const hashedPassword = await bcrypt.hash(signupData.password, 10);
             const signupDataWithHash = { ...signupData, password: hashedPassword };
-            const response = await axios.post('http://localhost:8000/student', signupDataWithHash);
+            const response = await axios.post('https://medicare-backend-1.vercel.app/student', signupDataWithHash);
             localStorage.setItem('studentId', response.data.id);
             navigate('/app/pcp');
         } catch (error) {
