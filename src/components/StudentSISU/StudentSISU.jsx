@@ -10,7 +10,7 @@ function StudentSISU() {
     const navigate = useNavigate();
     const [isPopupVisible, setPopupVisible] = useState(false);
     const [trackAmb, setTrackAmb] = useState(false);
-    const [signupData, setSignupData] = useState({
+    const [signupData, setSignupData] = useState({   
         name: '',
         email: '',
         roll_no: '',
