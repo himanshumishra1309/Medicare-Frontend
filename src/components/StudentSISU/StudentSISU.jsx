@@ -100,7 +100,7 @@ function StudentSISU() {
                   'Access-Control-Allow-Origin': 'https://medicare-frontend-lyart.vercel.app',
                   // 'Access-Control-Request-Headers': '*',
                 },
-                withCredentials: true,
+                withCredentials: true,  
               })
             localStorage.setItem('studentId', response.data.id);
             navigate('/app/pcp');
