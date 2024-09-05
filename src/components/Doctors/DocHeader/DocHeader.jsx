@@ -11,6 +11,8 @@ import { Context } from '../../../Context/Context';
 import { FaAmbulance } from 'react-icons/fa';
 import Popup from '../../Popup/Popup';
 import TrackAmb from '../../DoctorSISU/TrackAmb/TrackAmb';
+import alerts from '../../../svgs/alerts.svg'
+import ShowAndPutAlerts from '../ShowAndPutAlerts/ShowAndPutAlerts';
 
 export default function DocHeader({
   scrollToAppointments,
@@ -18,6 +20,7 @@ export default function DocHeader({
 }) {
   const [activeSection, setActiveSection] = useState('');
   const [profileCard, setProfileCard] = useState(false);
+  const [alertCard, setAlertCard] = useState(false);
   const [showPopup, setShowPopup] = useState(false);
   const [showPopup2, setShowPopup2] = useState(false);
   const {shifts, setShifts} = useContext(Context);
@@ -125,6 +128,25 @@ export default function DocHeader({
                   onClick={toggleShift}
                 >
                   <img src={shift} className='size-24' alt="Shift schedule icon" />
+                </button>
+              </li>
+              <li>
+                <button
+                  className='border-none'
+                  onClick={() => setAlertCard(true)}  // Trigger the alert popup
+                >
+                  <img src={alerts} className='size-16' alt="Send Alerts icon" />
+                  {alertCard && (
+                    <div
+                      id="alert-overlay" // Use a unique ID for the alert overlay
+                      className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-10"
+                      onClick={(e) => {
+                        if (e.target.id === 'alert-overlay') setAlertCard(false); // Close only if the overlay is clicked
+                      }}
+                    >
+                      <ShowAndPutAlerts onClose={() => setAlertCard(false)} />
+                    </div>
+                  )}
                 </button>
               </li>
               <li>

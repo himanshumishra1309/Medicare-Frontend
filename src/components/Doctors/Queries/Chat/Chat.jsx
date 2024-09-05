@@ -146,6 +146,7 @@ function Chat({ handle, name, socket, room}) {
             medicines={medicines}
             setMedicines={setMedicines}
             readOnly={false}  // Changed to false to allow adding/editing medicines
+            socket={socket}
           />
         )}
         {!chat && !viewPills && prescribedPills && (

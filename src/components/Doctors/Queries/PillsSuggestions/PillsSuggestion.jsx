@@ -1,7 +1,10 @@
 import React, { useState, useContext, useEffect } from 'react';
 import { Context } from '../../../../Context/Context';
+import { io } from 'socket.io-client';
 
-function PillsSuggestion({ medicines, setMedicines }) {
+const socket = io("http://localhost:3005");
+
+function PillsSuggestion({ medicines, setMedicines, socket }) {
   const { suggestedPills, setSuggestedPills } = useContext(Context);
   const [medicineName, setMedicineName] = useState('');
   const [medicineQuantity, setMedicineQuantity] = useState('');
@@ -22,17 +25,28 @@ function PillsSuggestion({ medicines, setMedicines }) {
   const handleAddMedicine = () => {
     if (medicineName && medicineQuantity && timings.length > 0) {
       const newMedicine = { medicineName, medicineQuantity, timings };
-      setMedicines([...medicines, newMedicine]);
+      const updatedMedicines = [...medicines, newMedicine];
+      setMedicines(updatedMedicines);
+      localStorage.setItem('doctors-prescription', JSON.stringify(updatedMedicines));
       setMedicineName('');
       setMedicineQuantity('');
       setTimings([]);
     }
   };
+  
 
   const handleRemoveMedicine = (index) => {
     const updatedMedicines = medicines.filter((_, i) => i !== index);
     setMedicines(updatedMedicines);
   };
+
+  useEffect(() => {
+    // Clear the previous data
+    localStorage.removeItem('doctors-prescription');
+    
+    // Optionally clear state if needed
+    setMedicines([]);
+  }, []);  
 
   useEffect(() => {
     setSuggestedPills(medicines);

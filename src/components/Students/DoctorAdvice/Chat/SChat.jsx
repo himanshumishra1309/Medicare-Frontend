@@ -79,7 +79,8 @@ function SChat({ handle, name, socket, room }) {
             // Add event handler for the View button
             viewButton.onclick = () => {
                 setChat(false); // Show prescription view when clicked
-                setPrescriptionData(suggestedPills); // Store the prescription data to view
+                const storedPills = JSON.parse(localStorage.getItem('doctors-prescription'));
+                setPrescriptionData(storedPills); // Retrieve the prescription data to view
             };
         
             // Append the text and button to the wrapper
@@ -106,6 +107,9 @@ function SChat({ handle, name, socket, room }) {
 
         const handleReceivePrescription = (data) => {
             if (data.author !== name) {
+                // Save the received prescription to localStorage
+                localStorage.setItem('doctors-prescription', JSON.stringify(data.medicines));
+                console.log('Prescription stored:', data.medicines); // Log the prescription data
                 handleChat(data.message, 'incoming', true);
             }
         };
@@ -153,7 +157,7 @@ function SChat({ handle, name, socket, room }) {
                 {chat ? (
                     <ul className="chatbox h-full overflow-y-auto scrollbar-custom " style={{ fontFamily: 'Kaisei HarunoUmi, sans-serif' }}/>
                 ) : (
-                    <ViewDocPrecription onBack={() => setChat(true)} />
+                    <ViewDocPrecription onBack={() => setChat(true)} prescriptionData={prescriptionData} />
                 )}
             </main>
             <div className="w-full flex items-center gap-4">

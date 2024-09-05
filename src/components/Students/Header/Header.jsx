@@ -10,7 +10,8 @@ export default function Header({
   scrollToAppointment,
   scrollToAdvice,
   scrollToShop,
-  scrollToReport
+  scrollToReport,
+  scrollToAlerts
 }) {
   const [activeSection, setActiveSection] = useState('');
   const [profileCard, setProfileCard] = useState(false);
@@ -136,6 +137,16 @@ export default function Header({
                   } text-white hover:bg-teal-700 cursor-pointer`}
                 >
                   Your Report
+                </button>
+              </li>
+              <li>
+                <button
+                  onClick={scrollToAlerts}
+                  className={`advice font-semibold block py-2 px-4 rounded-full duration-200 ${
+                    activeSection === 'shop' ? 'bg-teal-700' : 'bg-teal-500'
+                  } text-white hover:bg-teal-700 cursor-pointer`}
+                >
+                  Alerts
                 </button>
               </li>
               <li>
