@@ -6,7 +6,7 @@ import ChatData from './Data/Data.json';
 import '../Appointments/scrollbar.css';
 import io from 'socket.io-client';
 
-const socket = io.connect("https://medicare-backend-chat.vercel.app");
+// const socket = io.connect("https://medicare-backend-chat.vercel.app");
 
 function Queries() {
   const [chatVisible, setChatVisible] = useState(false);
@@ -16,8 +16,8 @@ function Queries() {
   const handleChat = (name, id) => {
     setSelectedName(name);
     if (id) {
-      setRoom(id);
-      socket.emit("joined_room", id);
+      // setRoom(id);
+      // socket.emit("joined_room", id);
       setChatVisible(true);
     }
   };

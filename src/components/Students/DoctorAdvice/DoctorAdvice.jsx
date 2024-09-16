@@ -6,7 +6,7 @@ import SChat from './Chat/SChat';
 import SDdata from './Data/Data.json'
 import { io } from 'socket.io-client';
 
-const socket = io.connect("https://medicare-backend-chat.vercel.app")
+// const socket = io.connect("https://medicare-backend-chat.vercel.app")
 
 export default function DoctorAdvice() {
   const [chatVisible, setChatVisible] = useState(false);
@@ -16,8 +16,8 @@ export default function DoctorAdvice() {
   const handleChat = (name, id) => {
     setSelectedName(name);
     if (id) {
-      setRoom(id);
-      socket.emit("joined_room", id);
+      // setRoom(id);
+      // socket.emit("joined_room", id);
       setChatVisible(true);
     }
   };
