@@ -134,7 +134,7 @@ function StudentSISU() {
                             <input className='border mb-2 p-2' id="roll_no" type="text" placeholder="Roll_No*" required value={signupData.roll_no} onChange={handleSignUpChange}></input>
                             <input className='border mb-2 p-2' id="year" type="text" placeholder="Year*" required value={signupData.year} onChange={handleSignUpChange}></input>
                             <input className='border mb-2 p-2' id="hostel" type="text" placeholder="hostel-name*" required value={signupData.hostel} onChange={handleSignUpChange}></input>
-                            <input className='border mb-2 p-2' id="room_no" type="number" placeholder="room-number*" required value={signupData.room_no} onChange={handleSignUpChange}></input>
+                            <input className='border mb-2 p-2' id="room_no" type="text" placeholder="room-number*" required value={signupData.room_no} onChange={handleSignUpChange}></input>
                             <input className='border mb-2 p-2' id="password" type="password" placeholder="Password*" required value={signupData.password} onChange={handleSignUpChange}></input>
                             <button className="button pt-2 pb-2 pl-4 pr-4 w-2/4 bg-teal-500 text-white m-2 font-semibold hover:bg-teal-400">Sign Up</button>
                         </form>
