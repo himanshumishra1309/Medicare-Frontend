@@ -113,10 +113,10 @@ function StudentSISU() {
     const handleLoginSubmit = async (e) => {
         e.preventDefault();
         try {
-            // Fetch user data by email
+            // Send email and password to login endpoint
             const response = await axios.post(
-                'https://medicare-backend-1.vercel.app/student/login', 
-                { email: loginData.email }, 
+                'https://medicare-backend-1.vercel.app/student_login', 
+                { email: loginData.email, password: loginData.password }, 
                 {
                     headers: {
                         'Content-Type': 'application/json',
@@ -125,24 +125,17 @@ function StudentSISU() {
                 }
             );
             
-            // Assuming the server sends back the user data including hashed password
+            // If login is successful
             const userData = response.data;
-    
-            // Compare entered password with the hashed password stored on the server
-            const isPasswordValid = await bcrypt.compare(loginData.password, userData.password);
-            if (isPasswordValid) {
-                // Password is correct, login the user
-                localStorage.setItem('studentId', userData.id);
-                navigate('/app/pcp');
-            } else {
-                console.error('Invalid password');
-                alert('Invalid email or password');
-            }
+            localStorage.setItem('studentId', userData.id);
+            navigate('/app/pcp');
+            
         } catch (error) {
             console.error('Error during login:', error);
             alert('Login failed. Please check your email or password.');
         }
     };
+    
     
 
     return (
