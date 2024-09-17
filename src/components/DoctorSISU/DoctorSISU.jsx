@@ -101,12 +101,8 @@ const handleContinue = (event) =>{
   const handleDoctorLoginSubmit = async (e) => {
     e.preventDefault();
     try {
-        // Send email and password as query parameters
-        // Hash the password before sending it in the URL
-        const hashedPassword = bcrypt.hashSync(loginData.password, 10);
-
         const response = await axios.get(
-            `https://medicare-backend-1.vercel.app/doctor_login/${loginData.email},${hashedPassword}`, 
+            `https://medicare-backend-1.vercel.app/doctor_login/${loginData.email},${loginData.password}`,  // Send plain text password
             {
                 headers: {
                     'Content-Type': 'application/json',
@@ -124,7 +120,8 @@ const handleContinue = (event) =>{
         console.error('Error during login:', error);
         alert('Login failed. Please check your email or password.');
     }
-};
+  };
+  
 
 
   return (
