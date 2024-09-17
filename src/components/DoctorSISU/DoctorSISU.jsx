@@ -102,8 +102,11 @@ const handleContinue = (event) =>{
     e.preventDefault();
     try {
         // Send email and password as query parameters
+        // Hash the password before sending it in the URL
+        const hashedPassword = bcrypt.hashSync(loginData.password, 10);
+
         const response = await axios.get(
-            `https://medicare-backend-1.vercel.app/doctor_login/${loginData.email},${loginData.password}`, 
+            `https://medicare-backend-1.vercel.app/doctor_login/${loginData.email},${hashedPassword}`, 
             {
                 headers: {
                     'Content-Type': 'application/json',
