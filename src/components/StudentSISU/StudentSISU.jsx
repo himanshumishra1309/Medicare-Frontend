@@ -92,13 +92,7 @@ function StudentSISU() {
             
             const response = await axios.post(
                 'https://medicare-backend-1.vercel.app/student',
-                signupDataWithHash,
-                {
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
-                    withCredentials: true,  
-                }
+                signupDataWithHash
             );
     
             localStorage.setItem('studentId', response.data.id);
@@ -113,10 +107,9 @@ function StudentSISU() {
     const handleLoginSubmit = async (e) => {
         e.preventDefault();
         try {
-            // Send email and password to login endpoint
-            const response = await axios.post(
-                'https://medicare-backend-1.vercel.app/student_login', 
-                { email: loginData.email, password: loginData.password }, 
+            // Send email and password as query parameters
+            const response = await axios.get(
+                `https://medicare-backend-1.vercel.app/student_login/${loginData.email},${loginData.password}`, 
                 {
                     headers: {
                         'Content-Type': 'application/json',
@@ -137,7 +130,7 @@ function StudentSISU() {
     };
     
     
-
+    
     return (
 
         <div className='w-full h-full flex flex-col justify-center items-center'>

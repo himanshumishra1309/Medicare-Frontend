@@ -98,16 +98,31 @@ const handleContinue = (event) =>{
     }
   };
 
-  const handleLoginSubmit = async (e) => {
+  const handleDoctorLoginSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await axios.post('http://localhost:8000/login', loginData);
-      localStorage.setItem('doctorId', response.data.id); // Store doctor ID
-      navigate('/doc'); // Redirect to the profile page
+        // Send email and password as query parameters
+        const response = await axios.get(
+            `https://medicare-backend-1.vercel.app/doctor_login/${loginData.email},${loginData.password}`, 
+            {
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                withCredentials: true
+            }
+        );
+        
+        // If login is successful
+        const doctorData = response.data;
+        localStorage.setItem('doctorId', doctorData.id);
+        navigate('/app/doctor_dashboard');
+        
     } catch (error) {
-      console.error('Error during login:', error);
+        console.error('Error during login:', error);
+        alert('Login failed. Please check your email or password.');
     }
-  };
+};
+
 
   return (
     <div className='w-full h-full flex flex-col justify-center items-center bg-slate-50'>
@@ -126,7 +141,7 @@ const handleContinue = (event) =>{
           </div>
 
           <div className="sign-in">
-            <form onSubmit={handleLoginSubmit}>
+            <form onSubmit={handleDoctorLoginSubmit}>
               <p className='mb-4'>Sign In</p>
               <input className='border mb-2 p-2' type="email-login" id="email" placeholder="Email" value={loginData.email} onChange={handleLoginChange} required />
               <input className='border mb-2 p-2' type="Password" id="password" placeholder="Password" value={loginData.password} onChange={handleLoginChange} required />
