@@ -13,35 +13,38 @@ const DocProfileCard = () => {
   });
   const [isLoading, setIsLoading] = useState(true); // Loading state
 
+  // Fetch the profile data from the backend
   useEffect(() => {
     const fetchProfile = async () => {
-      const doctorId = localStorage.getItem('doctorId');
-      if (doctorId) {
-        try {
-          const response = await axios.get(`https://medicare-backend-1.vercel.app/doctor/${doctorId}`);
-          // console.log(response);
-          // console.log(response.data);
-          setProfileData({
-            name: response.data.name,
-            email: response.data.email,
-            experience: response.data.experience,
-            qualification: response.data.qualification
-          });
-        } catch (error) {
-          console.error('Error fetching profile:', error);
-          if (error.response && error.response.status === 404) {
-            alert('Doctor profile not found.');
-          }
-        } finally {
-          setIsLoading(false); // Set loading to false after fetching data
+      try {
+        const response = await axios.get('/api/v1/doctors/current-user');
+        console.log('Fetched Profile:', response.data);
+  
+        // Update profile data state
+        setProfileData({
+          name: response.data.data.name || '',
+          email: response.data.data.email || '',
+          experience: response.data.data.experience || '',
+          qualification: response.data.data.qualification || ''
+        });
+  
+      } catch (error) {
+        console.error('Error fetching profile:', error);
+        if (error.response && error.response.status === 404) {
+          alert('Profile not found.');
         }
-      } else {
-        setIsLoading(false); // Set loading to false if no doctor ID is found
+      } finally {
+        setIsLoading(false);
       }
     };
-
+  
     fetchProfile();
   }, []);
+
+  // Log profileData after it has been updated
+  useEffect(() => {
+    console.log("Profile Data State Updated:", profileData);
+  }, [profileData]);
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -51,41 +54,40 @@ const DocProfileCard = () => {
     });
   };
 
-  const handleSave = async () => {
-    const doctorId = localStorage.getItem('doctorId');
-    if (doctorId) {
-      try {
-        // Fetch the full profile data including fields like hashed_password, created_at, etc.
-        const fullProfileData = await axios.get(`https://medicare-backend-1.vercel.app/doctor/${doctorId}`);
-  
-        // Merge the edited fields with the unchanged ones
-        const updatedProfileData = {
-          ...fullProfileData.data, // Include all original fields
-          ...profileData, // Overwrite with edited fields
-        };
-  
-        // Log the data being sent
-        console.log('Data being sent:', updatedProfileData);
-  
-        const response = await axios.put(`https://medicare-backend-1.vercel.app/doctor/${doctorId}`, updatedProfileData);
-  
-        if (response.status === 200) {
-          alert('Profile updated successfully.');
-          setIsEditing(false); // Change back to non-editing mode after save
-        } else {
-          alert('Failed to update profile. Please try again.');
-        }
-      } catch (error) {
-        console.error('Error updating profile:', error);
-  
-        if (error.response && error.response.status === 422) {
-          alert('Validation error: Please ensure all fields are filled out correctly.');
-        } else {
-          alert('Error occurred while updating the profile.');
-        }
-      }
+  // Function to update profile data
+const handleSave = async () => {
+  try {
+    const response = await axios.patch('/api/v1/doctors/update-account', {
+      name: profileData.name,
+      email: profileData.email,
+      experience: profileData.experience || '',
+      qualification: profileData.qualification || ''
+    });
+    if (response.status === 200) {
+      alert('Profile updated successfully.');
+      setIsEditing(false);
+
+      // Re-fetch profile data after update
+      const updatedResponse = await axios.get('/api/v1/doctors/current-user');
+      const updatedData = updatedResponse.data;
+      setProfileData({
+        name: updatedData.data.name || '',
+        email: updatedData.data.email || '',
+        experience: updatedData.data.experience || '',
+        qualification: updatedData.data.qualification || ''
+      });
+    } else {
+      alert('Failed to update profile. Please try again.');
     }
-  };
+  } catch (error) {
+    console.error('Error updating profile:', error);
+    if (error.response && error.response.status === 422) {
+      alert('Validation error: Please ensure all fields are filled out correctly.');
+    } else {
+      alert('Error occurred while updating the profile.');
+    }
+  }
+};
   
   
 

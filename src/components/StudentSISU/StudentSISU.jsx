@@ -3,14 +3,13 @@ import '../DoctorSISU/doctorsisu.css';
 import Popup from '../Popup/Popup';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
-import bcrypt from 'bcryptjs';
 import TrackAmb from '../DoctorSISU/TrackAmb/TrackAmb';
 
 function StudentSISU() {
     const navigate = useNavigate();
     const [isPopupVisible, setPopupVisible] = useState(false);
     const [trackAmb, setTrackAmb] = useState(false);
-    const [signupData, setSignupData] = useState({   
+    const [signupData, setSignupData] = useState({
         name: '',
         email: '',
         roll_no: '',
@@ -43,30 +42,15 @@ function StudentSISU() {
         }
     }, []);
 
-    const handleCancleClick = () => {
-        const changebutton = document.querySelector('#Ambulance-Button');
-        changebutton.classList.remove('bg-orange-500');
-        changebutton.classList.add('bg-red-600');
-        changebutton.innerText = "Call an Ambulance"
-        setTrackAmb(false);
-    }
-
     const handleSavePostClick = (event) => {
         event.preventDefault();
-        if(event.target.innerHTML == "Call an Ambulance"){
-            setPopupVisible(true);
-        }
-        if(event.target.innerHTML == "Track Your Ambulance"){
-            console.log(event.target.innerHTML);
-            setPopupVisible(false);
-            setTrackAmb(true);
-        }
+        setPopupVisible(true);
     };
 
     const handleContinue = (event) =>{
         setPopupVisible(false);
         const changebutton = document.querySelector('#Ambulance-Button')
-        changebutton.classList.add('bg-orange-500');
+        changebutton.style.backgroundColor = "Orange";
         changebutton.innerText = "Track Your Ambulance"
     }
 
@@ -87,50 +71,33 @@ function StudentSISU() {
     const handleSignUpSubmit = async (e) => {
         e.preventDefault();
         try {
-            const hashedPassword = await bcrypt.hash(signupData.password, 10);
-            const signupDataWithHash = { ...signupData, password: hashedPassword };
-            
-            const response = await axios.post(
-                'https://medicare-backend-1.vercel.app/student',
-                signupDataWithHash
-            );
+            const response = await axios.post('/api/v1/students/register', signupData);
+            navigate('/app/pcp');
+        } catch (error) {
+            alert('Error during signup:', error);
+        }
+    };
     
+
+    const handleLoginSubmit = async (e) =>{
+        e.preventDefault();
+        try {
+            const response = await axios.post('/api/v1/students/login', loginData);
             localStorage.setItem('studentId', response.data.id);
             navigate('/app/pcp');
         } catch (error) {
             console.error('Error during signup:', error);
         }
-    };
+    }
     
-    
+    const handleCancleClick = () => {
+        const changebutton = document.querySelector('#Ambulance-Button');
+        changebutton.classList.remove('bg-orange-500');
+        changebutton.classList.add('bg-red-600');
+        changebutton.innerText = "Call an Ambulance"
+        setTrackAmb(false);
+    }
 
-    const handleLoginSubmit = async (e) => {
-        e.preventDefault();
-        try {
-            // Send email and password as query parameters
-            const response = await axios.get(
-                `https://medicare-backend-1.vercel.app/student_login/${loginData.email},${loginData.password}`, 
-                {
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
-                    withCredentials: true
-                }
-            );
-            
-            // If login is successful
-            const userData = response.data;
-            localStorage.setItem('studentId', userData.id);
-            navigate('/app/pcp');
-            
-        } catch (error) {
-            console.error('Error during login:', error);
-            alert('Login failed. Please check your email or password.');
-        }
-    };
-    
-    
-    
     return (
 
         <div className='w-full h-full flex flex-col justify-center items-center'>
@@ -144,7 +111,7 @@ function StudentSISU() {
                             <input className='border mb-2 p-2' id="roll_no" type="text" placeholder="Roll_No*" required value={signupData.roll_no} onChange={handleSignUpChange}></input>
                             <input className='border mb-2 p-2' id="year" type="text" placeholder="Year*" required value={signupData.year} onChange={handleSignUpChange}></input>
                             <input className='border mb-2 p-2' id="hostel" type="text" placeholder="hostel-name*" required value={signupData.hostel} onChange={handleSignUpChange}></input>
-                            <input className='border mb-2 p-2' id="room_no" type="text" placeholder="room-number*" required value={signupData.room_no} onChange={handleSignUpChange}></input>
+                            <input className='border mb-2 p-2' id="room_no" type="number" placeholder="room-number*" required value={signupData.room_no} onChange={handleSignUpChange}></input>
                             <input className='border mb-2 p-2' id="password" type="password" placeholder="Password*" required value={signupData.password} onChange={handleSignUpChange}></input>
                             <button className="button pt-2 pb-2 pl-4 pr-4 w-2/4 bg-teal-500 text-white m-2 font-semibold hover:bg-teal-400">Sign Up</button>
                         </form>

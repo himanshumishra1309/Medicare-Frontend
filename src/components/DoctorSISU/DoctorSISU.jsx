@@ -3,7 +3,6 @@ import './doctorsisu.css';
 import Popup from '../Popup/Popup';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
-import bcrypt from 'bcryptjs';  // Import bcryptjs
 import TrackAmb from './TrackAmb/TrackAmb';
 
 function DoctorSISU() {
@@ -80,56 +79,39 @@ const handleContinue = (event) =>{
     setLoginData({ ...loginData, [id]: value });
   };
 
-  const handleSignupSubmit = async (e) => {
+  const handleSignUpSubmit = async (e) => {
     e.preventDefault();
     try {
-      // Hash the password before sending it to the backend
-      const hashedPassword = bcrypt.hashSync(signupData.password, 10);
-      const signupDataWithHash = { ...signupData, hashed_password: hashedPassword };
-      
-      // Remove the plain password field (optional but recommended)
-      delete signupDataWithHash.password;
-      
-      const response = await axios.post('https://medicare-backend-1.vercel.app/doctor', signupDataWithHash);
-      localStorage.setItem('doctorId', response.data.id); // Store doctor ID
-      navigate('/doc'); // Redirect to the profile page
+      const response = await axios.post('/api/v1/doctors/register', signupData);
+      navigate('/doc');
     } catch (error) {
       console.error('Error during signup:', error);
-    }
-  };
-
-  const handleDoctorLoginSubmit = async (e) => {
-    e.preventDefault();
-    try {
-        const response = await axios.get(
-            `https://medicare-backend-1.vercel.app/doctor_login/${loginData.email},${loginData.password}`,  // Send plain text password
-            {
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                withCredentials: true
-            }
-        );
-        
-        // If login is successful
-        const doctorData = response.data;
-        localStorage.setItem('doctorId', doctorData.id);
-        navigate('/app/doctor_dashboard');
-        
-    } catch (error) {
-        console.error('Error during login:', error);
-        alert('Login failed. Please check your email or password.');
+      alert('Signup failed. Please try again.');
     }
   };
   
 
+const handleLoginSubmit = async (e) => {
+  e.preventDefault();
+  try {
+      const response = await axios.post('/api/v1/doctors/login', loginData);
+      console.log("Login response:", response.data);  // Add this to see what you get
+      navigate('/doc');  // Redirect to profile page
+  } catch (error) {
+      if (error.response) {
+          console.error('Error during login:', error.response.data); // Capture error message from backend
+      } else {
+          console.error('Error during login:', error.message); // Capture other errors
+      }
+  }
+};
 
   return (
     <div className='w-full h-full flex flex-col justify-center items-center bg-slate-50'>
       <div className='w-full flex justify-center items-center bg-slate-50'>
         <div className="container w-1/2" id="main">
           <div className="sign-up">
-            <form onSubmit={handleSignupSubmit}>
+            <form onSubmit={handleSignUpSubmit}>
               <p className='mb-4'>Sign Up</p>
               <input className='border mb-2 p-2' id="name" type="text" placeholder="Name*" value={signupData.name} onChange={handleSignupChange} required />
               <input className='border mb-2 p-2' id="email" type="email" placeholder="Email*" value={signupData.email} onChange={handleSignupChange} required />
@@ -141,7 +123,7 @@ const handleContinue = (event) =>{
           </div>
 
           <div className="sign-in">
-            <form onSubmit={handleDoctorLoginSubmit}>
+            <form onSubmit={handleLoginSubmit}>
               <p className='mb-4'>Sign In</p>
               <input className='border mb-2 p-2' type="email-login" id="email" placeholder="Email" value={loginData.email} onChange={handleLoginChange} required />
               <input className='border mb-2 p-2' type="Password" id="password" placeholder="Password" value={loginData.password} onChange={handleLoginChange} required />

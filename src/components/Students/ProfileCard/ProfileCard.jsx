@@ -10,38 +10,47 @@ const ProfileCard = () => {
     email: '',
     roll_no: '',
     year: '',
+    hostel:'',
     room_no: '',
   });
   const [isLoading, setIsLoading] = useState(true); 
 
+  
+  // Fetch the profile data from the backend
   useEffect(() => {
-      const fetchProfile = async () => {
-        const studentId = localStorage.getItem('studentId');
-        if(studentId){
-          try {
-            const response = await axios.get(`https://medicare-backend-1.vercel.app/student/${studentId}`);
-            setProfileData({
-              name: response.data.name,
-              email: response.data.email,
-              roll_no: response.data.roll_no,
-              year: response.data.year,
-              room_no: response.data.room_no,
-            });
-          } catch (error) {
-            console.error('Error fetching profile:', error);
-            if (error.response && error.response.status === 404) {
-              alert('Profile not found.');
-            }
-          } finally{
-            setIsLoading(false);
-          }
-        } else{
-          setIsLoading(false);
+    const fetchProfile = async () => {
+      try {
+        const response = await axios.get('/api/v1/students/current-user');
+        console.log('Fetched Profile:', response.data);
+  
+        // Update profile data state
+        setProfileData({
+          name: response.data.data.name || '',
+          email: response.data.data.email || '',
+          roll_no: response.data.data.roll_no || '',
+          year: response.data.data.year || '',
+          hostel: response.data.data.hostel || '',
+          room_no: response.data.data.room_no || '',
+        });
+  
+      } catch (error) {
+        console.error('Error fetching profile:', error);
+        if (error.response && error.response.status === 404) {
+          alert('Profile not found.');
         }
-      };
-
-      fetchProfile();
+      } finally {
+        setIsLoading(false);
+      }
+    };
+  
+    fetchProfile();
   }, []);
+  
+  // Log profileData after it has been updated
+  useEffect(() => {
+    console.log("Profile Data State Updated:", profileData);
+  }, [profileData]);
+  
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -51,39 +60,43 @@ const ProfileCard = () => {
     });
   };
 
-// Function to update student data
+
+// Function to update profile data
 const handleSave = async () => {
-  const studentId = localStorage.getItem('studentId');
-  if (studentId) {
-    try {
-      // Fetch the full profile data
-      const { data: fullProfileData } = await axios.get(`https://medicare-backend-1.vercel.app/student/${studentId}`);
-      
-      // Merge edited fields with the original fields, keeping sensitive data intact
-      const updatedProfileData = {
-        ...fullProfileData,
-        ...profileData,
-        password: fullProfileData.hashed_password, // Keep the existing password or adjust as necessary
-      };
+  try {
+    const response = await axios.patch('/api/v1/students/update-account', {
+      name: profileData.name,
+      email: profileData.email,
+      roll_no: profileData.roll_no,
+      year: profileData.year,
+      room_no: profileData.room_no,
+      hostel: profileData.hostel,   // Include this if it's required by your API
+      _id: profileData._id          // If the API expects an ID
+    });
+    if (response.status === 200) {
+      alert('Profile updated successfully.');
+      setIsEditing(false);
 
-      // Log the data being sent
-      console.log('Data being sent:', updatedProfileData);
-
-      const response = await axios.put(`https://medicare-backend-1.vercel.app/student/${studentId}`, updatedProfileData);
-
-      if (response.status === 200) {
-        alert('Profile updated successfully.');
-        setIsEditing(false);
-      } else {
-        alert('Failed to update profile. Please try again.');
-      }
-    } catch (error) {
-      console.error('Error updating profile:', error);
-      if (error.response && error.response.status === 422) {
-        alert('Validation error: Please ensure all fields are filled out correctly.');
-      } else {
-        alert('Error occurred while updating the profile.');
-      }
+      // Re-fetch profile data after update
+      const updatedResponse = await axios.get('/api/v1/students/current-user');
+      const updatedData = updatedResponse.data;
+      setProfileData({
+        name: updatedData.data.name || '',
+        email: updatedData.data.email || '',
+        roll_no: updatedData.data.roll_no || '',
+        year: updatedData.data.year || '',
+        hostel: updatedData.data.hostel || '',
+        room_no: updatedData.data.room_no || '',
+      });
+    } else {
+      alert('Failed to update profile. Please try again.');
+    }
+  } catch (error) {
+    console.error('Error updating profile:', error);
+    if (error.response && error.response.status === 422) {
+      alert('Validation error: Please ensure all fields are filled out correctly.');
+    } else {
+      alert('Error occurred while updating the profile.');
     }
   }
 };
@@ -138,7 +151,7 @@ const handleSave = async () => {
           )}
         </h2>
         <form className="w-full">
-          {['email', 'roll_no', 'year', 'room_no'].map((field, index) => (
+          {['email', 'roll_no', 'year', 'hostel', 'room_no'].map((field, index) => (
             <div key={index} className="w-full mb-4 flex items-center justify-between">
               <label
                 htmlFor={field}
