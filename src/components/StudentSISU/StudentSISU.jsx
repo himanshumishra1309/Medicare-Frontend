@@ -4,6 +4,7 @@ import Popup from '../Popup/Popup';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import TrackAmb from '../DoctorSISU/TrackAmb/TrackAmb';
+import {URI} from '../Constant/constant.js'
 
 function StudentSISU() {
     const navigate = useNavigate();
@@ -71,7 +72,7 @@ function StudentSISU() {
     const handleSignUpSubmit = async (e) => {
         e.preventDefault();
         try {
-            const response = await axios.post('/api/v1/students/register', signupData);
+            const response = await axios.post(`${URI}/api/v1/students/register`, signupData);
             navigate('/app/pcp');
         } catch (error) {
             alert('Error during signup:', error);
@@ -82,7 +83,7 @@ function StudentSISU() {
     const handleLoginSubmit = async (e) =>{
         e.preventDefault();
         try {
-            const response = await axios.post('/api/v1/students/login', loginData);
+            const response = await axios.post(`${URI}/api/v1/students/login`, loginData);
             localStorage.setItem('studentId', response.data.id);
             navigate('/app/pcp');
         } catch (error) {

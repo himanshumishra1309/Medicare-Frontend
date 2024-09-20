@@ -1,0 +1,1 @@
+export const URI = 'https://medicare-backend-js.vercel.app';
