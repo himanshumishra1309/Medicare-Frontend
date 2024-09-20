@@ -21,22 +21,7 @@ const ProfileCard = () => {
   useEffect(() => {
     const fetchProfile = async () => {
       try {
-        // Get the token from localStorage (or cookies if stored there)
-        const token = localStorage.getItem('studentAccessToken');
-        
-        // Check if the token exists
-        if (!token) {
-          console.error('No access token found');
-          alert('You are not authenticated. Please log in.');
-          return;
-        }
-  
-        // Make the GET request with Authorization header
-        const response = await axios.get(`${URI}/api/v1/students/current-user`, {
-          headers: {
-            Authorization: `Bearer ${token}`,  // Pass the token here
-          },
-        });
+        const response = await axios.get(`${URI}/api/v1/students/current-user`);
         console.log('Fetched Profile:', response.data);
   
         // Update profile data state
@@ -53,8 +38,6 @@ const ProfileCard = () => {
         console.error('Error fetching profile:', error);
         if (error.response && error.response.status === 404) {
           alert('Profile not found.');
-        } else if (error.response && error.response.status === 401) {
-          alert('Unauthorized access. Please log in.');
         }
       } finally {
         setIsLoading(false);
@@ -63,7 +46,6 @@ const ProfileCard = () => {
   
     fetchProfile();
   }, []);
-  
   
   // Log profileData after it has been updated
   useEffect(() => {
@@ -83,40 +65,21 @@ const ProfileCard = () => {
 // Function to update profile data
 const handleSave = async () => {
   try {
-    // Get the token from localStorage
-    const token = localStorage.getItem('studentAccessToken');
-    
-    if (!token) {
-      console.error('No access token found');
-      alert('You are not authenticated. Please log in.');
-      return;
-    }
-
-    // Make the PATCH request with Authorization header
     const response = await axios.patch(`${URI}/api/v1/students/update-account`, {
       name: profileData.name,
       email: profileData.email,
       roll_no: profileData.roll_no,
       year: profileData.year,
       room_no: profileData.room_no,
-      hostel: profileData.hostel,
-      _id: profileData._id
-    }, {
-      headers: {
-        Authorization: `Bearer ${token}`,  // Pass the token here
-      },
+      hostel: profileData.hostel,   // Include this if it's required by your API
+      _id: profileData._id          // If the API expects an ID
     });
-
     if (response.status === 200) {
       alert('Profile updated successfully.');
       setIsEditing(false);
 
       // Re-fetch profile data after update
-      const updatedResponse = await axios.get(`${URI}/api/v1/students/current-user`, {
-        headers: {
-          Authorization: `Bearer ${token}`,  // Pass the token here as well
-        },
-      });
+      const updatedResponse = await axios.get(`${URI}/api/v1/students/current-user`);
       const updatedData = updatedResponse.data;
       setProfileData({
         name: updatedData.data.name || '',
@@ -138,7 +101,6 @@ const handleSave = async () => {
     }
   }
 };
-
 
 
   const handleEdit = () => {
