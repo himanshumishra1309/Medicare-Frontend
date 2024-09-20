@@ -21,7 +21,7 @@ const ProfileCard = () => {
   useEffect(() => {
     const fetchProfile = async () => {
       try {
-        const response = await axios.get(`${URI}/api/v1/students/current-user`);
+        const response = await axios.get(`${URI}/api/v1/students/current-user`, { withCredentials: true });
         console.log('Fetched Profile:', response.data);
   
         // Update profile data state
