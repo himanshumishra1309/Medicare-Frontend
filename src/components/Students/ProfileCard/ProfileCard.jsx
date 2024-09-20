@@ -2,6 +2,7 @@ import axios from 'axios';
 import React, { useState, useEffect } from 'react';
 import { FaPassport, FaPen, FaSave } from 'react-icons/fa';
 import './loading.css'
+import {URI} from '../../Constant/constant.js'
 
 const ProfileCard = () => {
   const [isEditing, setIsEditing] = useState(false);
@@ -20,7 +21,7 @@ const ProfileCard = () => {
   useEffect(() => {
     const fetchProfile = async () => {
       try {
-        const response = await axios.get('/api/v1/students/current-user');
+        const response = await axios.get(`${URI}/api/v1/students/current-user`);
         console.log('Fetched Profile:', response.data);
   
         // Update profile data state
@@ -64,7 +65,7 @@ const ProfileCard = () => {
 // Function to update profile data
 const handleSave = async () => {
   try {
-    const response = await axios.patch('/api/v1/students/update-account', {
+    const response = await axios.patch(`${URI}/api/v1/students/update-account`, {
       name: profileData.name,
       email: profileData.email,
       roll_no: profileData.roll_no,
@@ -78,7 +79,7 @@ const handleSave = async () => {
       setIsEditing(false);
 
       // Re-fetch profile data after update
-      const updatedResponse = await axios.get('/api/v1/students/current-user');
+      const updatedResponse = await axios.get(`${URI}/api/v1/students/current-user`);
       const updatedData = updatedResponse.data;
       setProfileData({
         name: updatedData.data.name || '',

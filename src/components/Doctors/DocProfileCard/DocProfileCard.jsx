@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { FaPen, FaSave } from 'react-icons/fa';
 import axios from 'axios';
 import '../../Students/ProfileCard/loading.css'
+import {URI} from '../../Constant/constant.js'
 
 const DocProfileCard = () => {
   const [isEditing, setIsEditing] = useState(false);
@@ -17,7 +18,7 @@ const DocProfileCard = () => {
   useEffect(() => {
     const fetchProfile = async () => {
       try {
-        const response = await axios.get('/api/v1/doctors/current-user');
+        const response = await axios.get(`${URI}/api/v1/doctors/current-user`);
         console.log('Fetched Profile:', response.data);
   
         // Update profile data state
@@ -57,7 +58,7 @@ const DocProfileCard = () => {
   // Function to update profile data
 const handleSave = async () => {
   try {
-    const response = await axios.patch('/api/v1/doctors/update-account', {
+    const response = await axios.patch(`${URI}/api/v1/doctors/update-account`, {
       name: profileData.name,
       email: profileData.email,
       experience: profileData.experience || '',
@@ -68,7 +69,7 @@ const handleSave = async () => {
       setIsEditing(false);
 
       // Re-fetch profile data after update
-      const updatedResponse = await axios.get('/api/v1/doctors/current-user');
+      const updatedResponse = await axios.get(`${URI}/api/v1/doctors/current-user`);
       const updatedData = updatedResponse.data;
       setProfileData({
         name: updatedData.data.name || '',

@@ -4,6 +4,7 @@ import Popup from '../Popup/Popup';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import TrackAmb from './TrackAmb/TrackAmb';
+import {URI} from '../Constant/constant.js'
 
 function DoctorSISU() {
   const navigate = useNavigate();
@@ -82,7 +83,7 @@ const handleContinue = (event) =>{
   const handleSignUpSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await axios.post('/api/v1/doctors/register', signupData);
+      const response = await axios.post(`${URI}/api/v1/doctors/register`, signupData);
       navigate('/doc');
     } catch (error) {
       console.error('Error during signup:', error);
@@ -94,7 +95,7 @@ const handleContinue = (event) =>{
 const handleLoginSubmit = async (e) => {
   e.preventDefault();
   try {
-      const response = await axios.post('/api/v1/doctors/login', loginData);
+      const response = await axios.post(`${URI}/api/v1/doctors/login`, loginData);
       console.log("Login response:", response.data);  // Add this to see what you get
       navigate('/doc');  // Redirect to profile page
   } catch (error) {
