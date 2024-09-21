@@ -69,7 +69,7 @@ const ProfileCard = () => {
 const handleSave = async () => {
   try {
     const accessToken = sessionStorage.getItem('studentAccessToken');
-    console.log({userInfo});
+    // console.log({userInfo});
     const headers = {
       "Authorization": `Bearer ${accessToken}`
     }

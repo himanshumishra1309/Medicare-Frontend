@@ -21,7 +21,7 @@ const DocProfileCard = () => {
         // Get access token from sessionStorage
         const accessToken = sessionStorage.getItem('doctorAccessToken');
 
-        headers= {
+        const headers= {
           "Authorization": `Bearer ${accessToken}`
         };
 
@@ -67,7 +67,7 @@ const handleSave = async () => {
   try {
     const accessToken = sessionStorage.getItem('doctorAccessToken');
 
-    headers= {
+    const headers= {
       "Authorization": `Bearer ${accessToken}`
     };
     const response = await axios.patch(`${URI}/api/v1/doctors/update-account`, {
