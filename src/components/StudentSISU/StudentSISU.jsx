@@ -73,7 +73,9 @@ function StudentSISU() {
         e.preventDefault();
         try {
             const response = await axios.post(`${URI}/api/v1/students/register`, signupData);
-            localStorage.setItem('studentAccessToken', response?.data?.data?.accessToken);
+            const userEmail = signupData.email;
+            localStorage.setItem('latestEmail', userEmail);
+            localStorage.setItem(`${userEmail}_studentAccessToken`, response?.data?.data?.accessToken);
             navigate('/app/pcp');
         } catch (error) {
             alert('Error during signup:', error);
@@ -85,7 +87,8 @@ function StudentSISU() {
         e.preventDefault();
         try {
             const response = await axios.post(`${URI}/api/v1/students/login`, loginData);
-            localStorage.setItem('studentAccessToken', response?.data?.data?.accessToken);
+            const userEmail = loginData.email;
+            localStorage.setItem(`${userEmail}_studentAccessToken`, response?.data?.data?.accessToken);
             navigate('/app/pcp');
         } catch (error) {
             console.error('Error during signup:', error);
