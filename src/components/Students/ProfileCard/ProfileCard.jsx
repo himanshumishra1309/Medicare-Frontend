@@ -21,7 +21,12 @@ const ProfileCard = () => {
   useEffect(() => {
     const fetchProfile = async () => {
       try {
-        const response = await axios.get(`${URI}/api/v1/students/current-user`, { withCredentials: true });
+        const userInfo = localStorage.getItem('user');
+        console.log({userInfo});
+        const headers = {
+          "Authorization": `Bearer ${userInfo?.accessToken}`
+        }
+        const response = await axios.get(`${URI}/api/v1/students/current-user`, { withCredentials: true, headers: headers });
         console.log('Fetched Profile:', response.data);
   
         // Update profile data state

@@ -84,7 +84,7 @@ function StudentSISU() {
         e.preventDefault();
         try {
             const response = await axios.post(`${URI}/api/v1/students/login`, loginData);
-            localStorage.setItem('studentId', response.data.id);
+            localStorage.setItem('user', response?.data?.data);
             navigate('/app/pcp');
         } catch (error) {
             console.error('Error during signup:', error);
