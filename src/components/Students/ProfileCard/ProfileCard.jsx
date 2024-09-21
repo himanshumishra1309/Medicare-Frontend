@@ -22,7 +22,6 @@ const ProfileCard = () => {
     const fetchProfile = async () => {
         try {
             // Get access token from sessionStorage
-            const userEmail = sessionStorage.getItem('userEmail');
             const accessToken = sessionStorage.getItem('studentAccessToken');
 
             const headers = {
@@ -69,11 +68,10 @@ const ProfileCard = () => {
 // Function to update profile data
 const handleSave = async () => {
   try {
-    const userEmail = localStorage.getItem('userEmail');
-    const userInfo = localStorage.getItem(`${userEmail}_studentAccessToken`);
+    const accessToken = sessionStorage.getItem('studentAccessToken');
     console.log({userInfo});
     const headers = {
-      "Authorization": `Bearer ${userInfo}`
+      "Authorization": `Bearer ${accessToken}`
     }
 
     const response = await axios.patch(`${URI}/api/v1/students/update-account`, {

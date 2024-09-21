@@ -18,7 +18,14 @@ const DocProfileCard = () => {
   useEffect(() => {
     const fetchProfile = async () => {
       try {
-        const response = await axios.get(`${URI}/api/v1/doctors/current-user`);
+        // Get access token from sessionStorage
+        const accessToken = sessionStorage.getItem('doctorAccessToken');
+
+        headers= {
+          "Authorization": `Bearer ${accessToken}`
+        };
+
+        const response = await axios.get(`${URI}/api/v1/doctors/current-user`, {headers});
         console.log('Fetched Profile:', response.data);
   
         // Update profile data state
@@ -58,18 +65,23 @@ const DocProfileCard = () => {
   // Function to update profile data
 const handleSave = async () => {
   try {
+    const accessToken = sessionStorage.getItem('doctorAccessToken');
+
+    headers= {
+      "Authorization": `Bearer ${accessToken}`
+    };
     const response = await axios.patch(`${URI}/api/v1/doctors/update-account`, {
       name: profileData.name,
       email: profileData.email,
       experience: profileData.experience || '',
       qualification: profileData.qualification || ''
-    });
+    }, {headers});
     if (response.status === 200) {
       alert('Profile updated successfully.');
       setIsEditing(false);
 
       // Re-fetch profile data after update
-      const updatedResponse = await axios.get(`${URI}/api/v1/doctors/current-user`);
+      const updatedResponse = await axios.get(`${URI}/api/v1/doctors/current-user`, {headers});
       const updatedData = updatedResponse.data;
       setProfileData({
         name: updatedData.data.name || '',

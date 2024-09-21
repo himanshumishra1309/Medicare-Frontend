@@ -84,6 +84,10 @@ const handleContinue = (event) =>{
     e.preventDefault();
     try {
       const response = await axios.post(`${URI}/api/v1/doctors/register`, signupData);
+      const accessToken = response?.data?.data?.accessToken;
+    
+      // Store user-specific data in sessionStorage
+      sessionStorage.setItem('doctorAccessToken', accessToken);
       navigate('/doc');
     } catch (error) {
       console.error('Error during signup:', error);
@@ -96,7 +100,10 @@ const handleLoginSubmit = async (e) => {
   e.preventDefault();
   try {
       const response = await axios.post(`${URI}/api/v1/doctors/login`, loginData);
-      console.log("Login response:", response.data);  // Add this to see what you get
+      const accessToken = response?.data?.data?.accessToken;
+            
+      // Store user-specific data in sessionStorage
+      sessionStorage.setItem('doctorAccessToken', accessToken);
       navigate('/doc');  // Redirect to profile page
   } catch (error) {
       if (error.response) {

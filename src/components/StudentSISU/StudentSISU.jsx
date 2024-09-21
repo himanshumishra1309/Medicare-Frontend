@@ -73,11 +73,9 @@ function StudentSISU() {
         e.preventDefault();
         try {
             const response = await axios.post(`${URI}/api/v1/students/login`, loginData);
-            const userEmail = loginData.email;
             const accessToken = response?.data?.data?.accessToken;
             
             // Store user-specific data in sessionStorage
-            sessionStorage.setItem('userEmail', userEmail);
             sessionStorage.setItem('studentAccessToken', accessToken);
             
             navigate('/app/pcp'); // Redirect to profile or dashboard page
@@ -90,11 +88,9 @@ function StudentSISU() {
         e.preventDefault();
         try {
             const response = await axios.post(`${URI}/api/v1/students/register`, signupData);
-            const userEmail = signupData.email;
             const accessToken = response?.data?.data?.accessToken;
     
             // Store user-specific data in sessionStorage
-            sessionStorage.setItem('userEmail', userEmail);
             sessionStorage.setItem('studentAccessToken', accessToken);
     
             navigate('/app/pcp'); // Redirect to profile or dashboard page
