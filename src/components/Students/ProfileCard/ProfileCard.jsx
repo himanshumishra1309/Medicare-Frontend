@@ -20,38 +20,34 @@ const ProfileCard = () => {
   // Fetch the profile data from the backend
   useEffect(() => {
     const fetchProfile = async () => {
-      try {
-        const userEmail = localStorage.getItem('userEmail');
-        const userInfo = localStorage.getItem(`${userEmail}_studentAccessToken`);
-        console.log({userInfo});
-        const headers = {
-          "Authorization": `Bearer ${userInfo}`
+        try {
+            // Get access token from sessionStorage
+            const userEmail = sessionStorage.getItem('userEmail');
+            const accessToken = sessionStorage.getItem('studentAccessToken');
+
+            const headers = {
+                "Authorization": `Bearer ${accessToken}`
+            };
+
+            // Fetch profile data
+            const response = await axios.get(`${URI}/api/v1/students/current-user`, { headers });
+            
+            setProfileData({
+                name: response.data.data.name || '',
+                email: response.data.data.email || '',
+                roll_no: response.data.data.roll_no || '',
+                year: response.data.data.year || '',
+                hostel: response.data.data.hostel || '',
+                room_no: response.data.data.room_no || '',
+            });
+        } catch (error) {
+            console.error('Error fetching profile:', error);
         }
-        const response = await axios.get(`${URI}/api/v1/students/current-user`, { withCredentials: true, headers: headers });
-        console.log('Fetched Profile:', response.data);
-  
-        // Update profile data state
-        setProfileData({
-          name: response.data.data.name || '',
-          email: response.data.data.email || '',
-          roll_no: response.data.data.roll_no || '',
-          year: response.data.data.year || '',
-          hostel: response.data.data.hostel || '',
-          room_no: response.data.data.room_no || '',
-        });
-  
-      } catch (error) {
-        console.error('Error fetching profile:', error);
-        if (error.response && error.response.status === 404) {
-          alert('Profile not found.');
-        }
-      } finally {
-        setIsLoading(false);
-      }
     };
-  
+
     fetchProfile();
-  }, []);
+}, []);
+
   
   // Log profileData after it has been updated
   useEffect(() => {

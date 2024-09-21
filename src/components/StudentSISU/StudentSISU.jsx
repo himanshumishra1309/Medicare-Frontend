@@ -69,31 +69,40 @@ function StudentSISU() {
         setLoginData({ ...loginData, [id]: value });
     }
 
+    const handleLoginSubmit = async (e) => {
+        e.preventDefault();
+        try {
+            const response = await axios.post(`${URI}/api/v1/students/login`, loginData);
+            const userEmail = loginData.email;
+            const accessToken = response?.data?.data?.accessToken;
+            
+            // Store user-specific data in sessionStorage
+            sessionStorage.setItem('userEmail', userEmail);
+            sessionStorage.setItem('studentAccessToken', accessToken);
+            
+            navigate('/app/pcp'); // Redirect to profile or dashboard page
+        } catch (error) {
+            console.error('Error during login:', error);
+        }
+    };
+    
     const handleSignUpSubmit = async (e) => {
         e.preventDefault();
         try {
             const response = await axios.post(`${URI}/api/v1/students/register`, signupData);
             const userEmail = signupData.email;
-            localStorage.setItem('latestEmail', userEmail);
-            localStorage.setItem(`${userEmail}_studentAccessToken`, response?.data?.data?.accessToken);
-            navigate('/app/pcp');
+            const accessToken = response?.data?.data?.accessToken;
+    
+            // Store user-specific data in sessionStorage
+            sessionStorage.setItem('userEmail', userEmail);
+            sessionStorage.setItem('studentAccessToken', accessToken);
+    
+            navigate('/app/pcp'); // Redirect to profile or dashboard page
         } catch (error) {
             alert('Error during signup:', error);
         }
     };
     
-
-    const handleLoginSubmit = async (e) =>{
-        e.preventDefault();
-        try {
-            const response = await axios.post(`${URI}/api/v1/students/login`, loginData);
-            const userEmail = loginData.email;
-            localStorage.setItem(`${userEmail}_studentAccessToken`, response?.data?.data?.accessToken);
-            navigate('/app/pcp');
-        } catch (error) {
-            console.error('Error during signup:', error);
-        }
-    }
     
     const handleCancleClick = () => {
         const changebutton = document.querySelector('#Ambulance-Button');
