@@ -70,6 +70,12 @@ const ProfileCard = () => {
 // Function to update profile data
 const handleSave = async () => {
   try {
+    const userInfo = localStorage.getItem('userAccessToken');
+    console.log({userInfo});
+    const headers = {
+      "Authorization": `Bearer ${userInfo}`
+    }
+
     const response = await axios.patch(`${URI}/api/v1/students/update-account`, {
       name: profileData.name,
       email: profileData.email,
@@ -78,7 +84,7 @@ const handleSave = async () => {
       room_no: profileData.room_no,
       hostel: profileData.hostel,   // Include this if it's required by your API
       _id: profileData._id          // If the API expects an ID
-    });
+    }, {headers: headers });
     if (response.status === 200) {
       alert('Profile updated successfully.');
       setIsEditing(false);
@@ -93,7 +99,7 @@ const handleSave = async () => {
         year: updatedData.data.year || '',
         hostel: updatedData.data.hostel || '',
         room_no: updatedData.data.room_no || '',
-      });
+      },  {headers: headers });
     } else {
       alert('Failed to update profile. Please try again.');
     }
