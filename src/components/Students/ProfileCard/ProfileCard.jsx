@@ -21,7 +21,7 @@ const ProfileCard = () => {
   useEffect(() => {
     const fetchProfile = async () => {
       try {
-        const userInfo = localStorage.getItem('userAccessToken');
+        const userInfo = localStorage.getItem('studentAccessToken');
         console.log({userInfo});
         const headers = {
           "Authorization": `Bearer ${userInfo}`
@@ -70,7 +70,7 @@ const ProfileCard = () => {
 // Function to update profile data
 const handleSave = async () => {
   try {
-    const userInfo = localStorage.getItem('userAccessToken');
+    const userInfo = localStorage.getItem('studentAccessToken');
     console.log({userInfo});
     const headers = {
       "Authorization": `Bearer ${userInfo}`

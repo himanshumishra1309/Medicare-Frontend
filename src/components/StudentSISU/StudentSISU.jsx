@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useId } from 'react';
 import '../DoctorSISU/doctorsisu.css';
 import Popup from '../Popup/Popup';
 import { useNavigate } from 'react-router-dom';
@@ -73,6 +73,7 @@ function StudentSISU() {
         e.preventDefault();
         try {
             const response = await axios.post(`${URI}/api/v1/students/register`, signupData);
+            localStorage.setItem('studentAccessToken', response?.data?.data?.accessToken);
             navigate('/app/pcp');
         } catch (error) {
             alert('Error during signup:', error);
@@ -84,11 +85,7 @@ function StudentSISU() {
         e.preventDefault();
         try {
             const response = await axios.post(`${URI}/api/v1/students/login`, loginData);
-            // console.log(response?.data?.data);
-            localStorage.setItem('userAccessToken', response?.data?.data?.accessToken);
-            localStorage.setItem('userRefreshToken', response?.data?.data?.refreshToken);
-            // console.log(response?.data?.data);
-            // localStorage.setItem('newUser', {...response?.data?.data});
+            localStorage.setItem('studentAccessToken', response?.data?.data?.accessToken);
             navigate('/app/pcp');
         } catch (error) {
             console.error('Error during signup:', error);
