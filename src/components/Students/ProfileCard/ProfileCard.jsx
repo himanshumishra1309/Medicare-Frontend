@@ -42,6 +42,8 @@ const ProfileCard = () => {
             });
         } catch (error) {
             console.error('Error fetching profile:', error);
+        }finally {
+          setIsLoading(false);
         }
     };
 
