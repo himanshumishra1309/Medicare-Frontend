@@ -90,7 +90,7 @@ const handleSave = async () => {
       setIsEditing(false);
 
       // Re-fetch profile data after update
-      const updatedResponse = await axios.get(`${URI}/api/v1/students/current-user`);
+      const updatedResponse = await axios.get(`${URI}/api/v1/students/current-user`, {headers: headers });
       const updatedData = updatedResponse.data;
       setProfileData({
         name: updatedData.data.name || '',
@@ -99,7 +99,7 @@ const handleSave = async () => {
         year: updatedData.data.year || '',
         hostel: updatedData.data.hostel || '',
         room_no: updatedData.data.room_no || '',
-      },  {headers: headers });
+      });
     } else {
       alert('Failed to update profile. Please try again.');
     }
