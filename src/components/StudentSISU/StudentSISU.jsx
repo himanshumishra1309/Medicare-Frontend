@@ -84,10 +84,11 @@ function StudentSISU() {
         e.preventDefault();
         try {
             const response = await axios.post(`${URI}/api/v1/students/login`, loginData);
-            console.log(response?.data?.data);
-            localStorage.setItem('user', response?.data?.data);
-            console.log(response?.data?.data);
-            localStorage.setItem('newUser', {...response?.data?.data});
+            // console.log(response?.data?.data);
+            localStorage.setItem('userAccessToken', response?.data?.data?.accessToken);
+            localStorage.setItem('userRefreshToken', response?.data?.data?.refreshToken);
+            // console.log(response?.data?.data);
+            // localStorage.setItem('newUser', {...response?.data?.data});
             navigate('/app/pcp');
         } catch (error) {
             console.error('Error during signup:', error);
